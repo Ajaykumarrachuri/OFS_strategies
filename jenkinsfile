@@ -1,11 +1,6 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
-            steps {
-                echo 'Checkout'
-            }
-        }
         stage('Build') {
             steps {
                 echo 'Clean Build'
@@ -24,13 +19,9 @@ pipeline {
                 jacoco()
             }
         }
-        stage('Sonar') {
-            steps {
-                echo 'Sonar Scanner'
-               	//def scannerHome = tool 'SonarQube Scanner 3.0'
-			    withSonarQubeEnv('SonarQube Server') {
-			    	bat 'C:/Dock/ci/sonar/sonar-scanner-3.0.3.778-windows/bin/sonar-scanner'
-			    }
+        stage('build') { 
+            steps { 
+               bat 'mvn install'
             }
         }
         stage('Package') {
@@ -39,6 +30,13 @@ pipeline {
                 bat 'mvn package -DskipTests'
             }
         }
+        stage("SonarQube analysis") {
+            steps {
+              withSonarQubeEnv('project-1') {
+                  bat 'mvn sonar:sonar'
+              }
+            }
+          }
         stage('Deploy') {
             steps {
                 echo '## TODO DEPLOYMENT ##'
