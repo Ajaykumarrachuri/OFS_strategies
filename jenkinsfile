@@ -30,13 +30,7 @@ pipeline {
                 bat 'mvn package -DskipTests'
             }
         }
-        stage("SonarQube analysis") {
-            steps {
-              withSonarQubeEnv('project-1') {
-                  bat 'mvn sonar:sonar'
-              }
-            }
-          }
+        
         stage('Deploy') {
             steps {
                 echo '## TODO DEPLOYMENT ##'
